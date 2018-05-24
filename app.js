@@ -45,22 +45,34 @@ document.querySelector('.btn-roll').addEventListener('click', function () {
     //the anonymous function that is only used here
     if(gamePlaying){
         
-        //1. Generate a randome dice number
-        var dice = Math.floor(Math.random()*6+1);
-        //2. Display the result
-        var diceDOM = document.querySelector('.dice');
-        diceDOM.style.display = 'block';
-        diceDOM.src = 'dice-' + dice + '.png';
-
-        //3. Update the round score IF the rolled number was NOT 1
-        if (dice !== 1) {
-            //Add score
-            roundScore += dice;
-            document.querySelector('#current-' + activePlayer).textContent = roundScore;
-        } else {
-            alert("You rolled 1, so all your round score are cleared!");
-            next_player();
-        }
+        var dice
+        
+        
+        var displayDice = new Promise(function(resolve, reject) {
+            //1. Generate a randome dice number
+            dice = Math.floor(Math.random()*6+1);
+            //2. Display the result
+            var diceDOM = document.querySelector('.dice');
+            diceDOM.style.display = 'block';
+            diceDOM.src = 'dice-' + dice + '.png';
+            setTimeout(function(){
+                resolve(true);
+            }, 50);
+            
+        });
+        displayDice.then(function(result) {
+            //3. Update the round score IF the rolled number was NOT 1
+            console.log(result);
+            if (dice !== 1) {
+                //Add score
+                roundScore += dice;
+                document.querySelector('#current-' + activePlayer).textContent = roundScore;
+            } else {
+                alert("You rolled 1, so all your round score are cleared!");
+                next_player();
+            }
+        });
+        
     }
 });
 
